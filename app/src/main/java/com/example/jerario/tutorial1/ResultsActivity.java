@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 import com.example.jerario.tutorial1.adapters.ProductAdapter;
+import com.example.jerario.tutorial1.tasks.SearchItemsTask;
+import com.example.jerario.tutorial1.utils.Closure;
 
 
 public class ResultsActivity extends Activity {
@@ -39,14 +41,19 @@ public class ResultsActivity extends Activity {
         //Intent
         Intent intent = getIntent();
         message = intent.getStringExtra(QUERY);
-        AsyncSearch async = new AsyncSearch();
-        async.execute();
+        SearchItemsTask.searchItems(message,0,15,new Closure<LinkedList<Item>>() {
+            @Override
+            public void executeOnSuccess(LinkedList<Item> result) {
+                refreshView(result);
+            }
+        });
         adapter = new ProductAdapter(ResultsActivity.this,productList);
         listResults.setAdapter(adapter);
     }
 
     private void refreshView(LinkedList<Item> list){
         Log.d("RESULTS ACTIVITY", "In refresh view");
+        Log.d("FIRST ITEM",list.getFirst().getTitle());
         productList.addAll(list);
         adapter.notifyDataSetChanged();
         Log.d("RESULTS ACTIVITY", "Finishing refresh view");
@@ -74,27 +81,5 @@ public class ResultsActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    private class AsyncSearch extends AsyncTask<String, Void, LinkedList<Item>> {
 
-
-        @Override
-        protected LinkedList<Item> doInBackground(String... strings) {
-
-            ItemManager manager = new ItemManager();
-            LinkedList<Item> list = new LinkedList<Item>();
-            try {
-                list = manager.searchItems(message, 0, 100);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return list;
-        }
-
-        @Override
-        protected void onPostExecute(LinkedList<Item> list) {
-            refreshView(list);
-        }
-    }
 }

@@ -17,6 +17,8 @@ import android.widget.EditText;
 public class MainActivity extends Activity {
     private EditText toSearch;
     private Button send;
+    private int offset;
+
     public static final String MYPREFERENCES = "myPrefs";
     public static final String LASTQUERY = "lastQuery";
 
@@ -25,15 +27,18 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initComponents();
+    }
+
+    private void initComponents(){
         setContentView(R.layout.activity_main);
         toSearch = (EditText)findViewById(R.id.toSearch);
         send = (Button)findViewById(R.id.buttonSearch);
 
         //Shared Preferences
         sharedPreferences = getSharedPreferences(MYPREFERENCES,MODE_PRIVATE);
-        if (sharedPreferences.contains(LASTQUERY)) {
-            toSearch.setText(sharedPreferences.getString(LASTQUERY, ""));
-        }
+        toSearch.setText(sharedPreferences.getString(LASTQUERY, ""));
+
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,8 +46,8 @@ public class MainActivity extends Activity {
                 sendSearch();
             }
         });
-    }
 
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -70,6 +75,14 @@ public class MainActivity extends Activity {
         Editor editor = sharedPreferences.edit();
         editor.putString(LASTQUERY, toSearch.getText().toString());
         editor.commit();
+    }
+
+    public boolean lastQueryChanged(){
+        String savedQuery = sharedPreferences.getString(LASTQUERY," ");
+        String queryString = toSearch.getText().toString();
+        if(savedQuery.equalsIgnoreCase(queryString))
+            return false;
+        return true;
     }
 
     public void sendSearch(){
