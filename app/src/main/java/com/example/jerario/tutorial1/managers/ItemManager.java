@@ -7,7 +7,6 @@ import com.example.jerario.tutorial1.entities.Item;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
@@ -23,6 +22,7 @@ import java.util.LinkedList;
 
 /**
  * Created by jerario on 11/11/14.
+ * @description: Search items using MercadoLibre API
  */
 public class ItemManager {
 
@@ -52,8 +52,8 @@ public class ItemManager {
         //Creating list of products
         LinkedList<Item> itemList = new LinkedList<Item>();
         JSONArray resultJsArray = result.getJSONArray("results");
-        JSONObject actualObject = null;
-        for (int i = 0; i < limit ; i++) {
+        JSONObject actualObject;
+        for (int i = 0; i < resultJsArray.length() ; i++) {
             Item item = new Item();
             actualObject = resultJsArray.getJSONObject(i);
             item.setTitle(actualObject.getString("title"));
