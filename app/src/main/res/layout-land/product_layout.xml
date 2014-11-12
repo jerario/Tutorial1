@@ -18,6 +18,14 @@
         android:text="Title"
         android:layout_toStartOf="@+id/price" />
 
+    <TextView android:id="@+id/subtitle"
+        android:layout_below="@id/title"
+        android:layout_toRightOf="@id/pic"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Subtitle"
+        android:layout_alignBottom="@+id/pic" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,5 +35,13 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Quantity"
+        android:id="@+id/quantity"
+        android:layout_below="@+id/title"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@+id/subtitle" />
 
 </RelativeLayout>

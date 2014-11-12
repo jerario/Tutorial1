@@ -2,7 +2,6 @@ package com.example.jerario.tutorial1;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,12 +13,11 @@ import com.example.jerario.tutorial1.entities.Item;
 import com.example.jerario.tutorial1.managers.ItemManager;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.LinkedList;
 
-import adapters.ProductAdapter;
+import com.example.jerario.tutorial1.adapters.ProductAdapter;
 
 
 public class ResultsActivity extends Activity {

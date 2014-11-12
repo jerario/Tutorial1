@@ -1,17 +1,16 @@
-package adapters;
+package com.example.jerario.tutorial1.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.jerario.tutorial1.R;
 import com.example.jerario.tutorial1.entities.Item;
 
+import java.text.NumberFormat;
 import java.util.LinkedList;
 
 /**
@@ -47,7 +46,7 @@ public class ProductAdapter extends BaseAdapter{
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        Log.d("PRODUCT ADAPTER","IN");
+      //  Log.d("PRODUCT ADAPTER","IN");
         ContenedorView contenedor;
         if (view == null) {
             contenedor = new ContenedorView();
@@ -76,19 +75,24 @@ public class ProductAdapter extends BaseAdapter{
         contenedor.title.setText(item.getTitle());
 
         //Price
-        contenedor.price.setText("$"+Double.toString(item.getPrice()));
+        contenedor.price.setText("$ "+ NumberFormat.getInstance().format(item.getPrice()));
 
         //Stock
         String stock = view.getContext().getString(R.string.stock);
         String quantity = Integer.toString(item.getAvailable_quantity());
-        contenedor.available_quantity.setText(stock +":"+quantity);
+
+        //Quantity
+        if (contenedor.available_quantity != null)
+            contenedor.available_quantity.setText(stock +":"+quantity);
 
         //Subtitle
-        if (contenedor.subtitle != null)
-            if (item.getSubtitle() != null)
+        if (contenedor.subtitle != null) {
+            if (item.getSubtitle() != null) {
                 contenedor.subtitle.setText(item.getSubtitle());
+            }
             else
-                contenedor.subtitle.setText("");
+                contenedor.subtitle.setText(" ");
+        }
         //contenedor.pic.setImageDrawable(item.getPic());
  //       Log.d("PRODUCT ADAPTER FINISHING", item.getTitle());
 

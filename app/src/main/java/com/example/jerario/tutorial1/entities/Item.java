@@ -65,7 +65,10 @@ public class Item {
     }
 
     public void setSubtitle(String subtitle) {
-        this.subtitle = subtitle;
+        if (subtitle == "null")
+            subtitle = null;
+        else
+            this.subtitle = subtitle;
     }
 
     public String getSeller() {
