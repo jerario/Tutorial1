@@ -60,7 +60,9 @@ public class ItemManager {
             item.setCondition(actualObject.getString("condition"));
             item.setSubtitle(actualObject.getString("subtitle"));
             item.setAvailable_quantity(actualObject.getInt("available_quantity"));
-            //item.setPicUrl(actualObject.getString(""));
+            Log.d("BUSCANDO    ", actualObject.getString("thumbnail"));
+            item.setPicUrl(actualObject.getString("thumbnail"));
+            Log.d("SETEADO    ", item.getPicUrl());
             item.setPrice(actualObject.getDouble("price"));
             itemList.add(item);
         }

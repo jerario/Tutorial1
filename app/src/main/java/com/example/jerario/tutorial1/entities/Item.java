@@ -1,5 +1,6 @@
 package com.example.jerario.tutorial1.entities;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 
 import java.io.InputStream;
@@ -7,10 +8,11 @@ import java.io.Serializable;
 import java.net.URL;
 
 /**
+ * Entity for Item
  * Created by jerario on 11/11/14.
  */
 
-public class Item {
+public class Item implements Serializable{
     private String id;
     private String title;
     private String subtitle;
@@ -22,6 +24,9 @@ public class Item {
     private String condition;
     private String description;
     private String picUrl;
+    private transient boolean isDownloading;
+    private transient Bitmap picture;
+
 
     public Item(){
 
@@ -129,16 +134,21 @@ public class Item {
 
     public String getPicUrl() { return picUrl; }
 
-    public void setPicUrl(String pic) { this.picUrl = picUrl; }
+    public void setPicUrl(String pic) { this.picUrl = pic; }
 
-    public Drawable getPic() {
-        try {
-            InputStream is = (InputStream) new URL(picUrl).getContent();
-            Drawable d = Drawable.createFromStream(is, "src name");
-            return d;
-        } catch (Exception e) {
-            return null;
-        }
+    public boolean isDownloading() {
+        return isDownloading;
     }
 
+    public void setDownloading(boolean isDownloading) {
+        this.isDownloading = isDownloading;
+    }
+
+    public Bitmap getPicture() {
+        return picture;
+    }
+
+    public void setPicture(Bitmap picture) {
+        this.picture = picture;
+    }
 }

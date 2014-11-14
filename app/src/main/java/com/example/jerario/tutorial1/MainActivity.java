@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.jerario.tutorial1.utils.CONST;
 
 
 public class MainActivity extends Activity {
@@ -19,8 +20,6 @@ public class MainActivity extends Activity {
     private Button send;
     private int offset;
 
-    public static final String MYPREFERENCES = "myPrefs";
-    public static final String LASTQUERY = "lastQuery";
 
     SharedPreferences sharedPreferences;
 
@@ -36,8 +35,8 @@ public class MainActivity extends Activity {
         send = (Button)findViewById(R.id.buttonSearch);
 
         //Shared Preferences
-        sharedPreferences = getSharedPreferences(MYPREFERENCES,MODE_PRIVATE);
-        toSearch.setText(sharedPreferences.getString(LASTQUERY, ""));
+        sharedPreferences = getSharedPreferences(CONST.MYPREFERENCES,MODE_PRIVATE);
+        toSearch.setText(sharedPreferences.getString(CONST.LASTQUERY, ""));
 
 
         send.setOnClickListener(new View.OnClickListener() {
@@ -73,12 +72,12 @@ public class MainActivity extends Activity {
 
     public void savingLastQuery(){
         Editor editor = sharedPreferences.edit();
-        editor.putString(LASTQUERY, toSearch.getText().toString());
+        editor.putString(CONST.LASTQUERY, toSearch.getText().toString());
         editor.commit();
     }
 
     public boolean lastQueryChanged(){
-        String savedQuery = sharedPreferences.getString(LASTQUERY," ");
+        String savedQuery = sharedPreferences.getString(CONST.LASTQUERY," ");
         String queryString = toSearch.getText().toString();
         if(savedQuery.equalsIgnoreCase(queryString))
             return false;

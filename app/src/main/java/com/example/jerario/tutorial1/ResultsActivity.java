@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.example.jerario.tutorial1.entities.Item;
 import com.example.jerario.tutorial1.managers.ItemManager;
@@ -19,45 +21,34 @@ import java.util.LinkedList;
 
 import com.example.jerario.tutorial1.adapters.ProductAdapter;
 import com.example.jerario.tutorial1.tasks.SearchItemsTask;
+import com.example.jerario.tutorial1.utils.CONST;
 import com.example.jerario.tutorial1.utils.Closure;
+import com.example.jerario.tutorial1.utils.EndlessListListener;
 
 
 public class ResultsActivity extends Activity {
 
     private String message;
-    private LinkedList<Item> productList;
-    private ListView listResults;
-    private ProductAdapter adapter;
-
-    //Constants
-    public static final String QUERY = "queryString";
+    private LinkedList<Item> productList = new LinkedList<Item>();
+    private EndlessListListener listListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
-        productList = new LinkedList<Item>();
-        listResults = (ListView) findViewById(R.id.results);
-        //Intent
         Intent intent = getIntent();
-        message = intent.getStringExtra(QUERY);
-        SearchItemsTask.searchItems(message,0,15,new Closure<LinkedList<Item>>() {
-            @Override
-            public void executeOnSuccess(LinkedList<Item> result) {
-                refreshView(result);
-            }
-        });
-        adapter = new ProductAdapter(ResultsActivity.this,productList);
-        listResults.setAdapter(adapter);
+        ListView listResults = (ListView) findViewById(R.id.results);
+        if (savedInstanceState == null)
+            listListener = new EndlessListListener(intent, ResultsActivity.this, listResults, productList);
+        else {
+            productList = (LinkedList<Item>) savedInstanceState.getSerializable("products");
+            listListener = new EndlessListListener(intent, ResultsActivity.this, listResults,productList);
+           // listListener.showView(products);
+        }
+        View inflatedView = getLayoutInflater().inflate(R.layout.product_loading, null);
+        listResults.addFooterView(inflatedView);
     }
 
-    private void refreshView(LinkedList<Item> list){
-        Log.d("RESULTS ACTIVITY", "In refresh view");
-        Log.d("FIRST ITEM",list.getFirst().getTitle());
-        productList.addAll(list);
-        adapter.notifyDataSetChanged();
-        Log.d("RESULTS ACTIVITY", "Finishing refresh view");
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -78,8 +69,14 @@ public class ResultsActivity extends Activity {
             return true;
         }
 
+
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("products",listListener.getProductList());
 
+    }
 }
