@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URL;
+import java.util.LinkedList;
 
 /**
  * Entity for Item
@@ -26,6 +27,8 @@ public class Item implements Serializable{
     private String picUrl;
     private transient boolean isDownloading;
     private transient Bitmap picture;
+    private LinkedList<String> quality_picturesUrl;
+    private transient Bitmap HQpicture;
 
 
     public Item(){
@@ -150,5 +153,28 @@ public class Item implements Serializable{
 
     public void setPicture(Bitmap picture) {
         this.picture = picture;
+    }
+
+    public LinkedList<String> getQuality_picturesUrl() {
+        return quality_picturesUrl;
+    }
+
+    public void setQuality_picturesUrl(LinkedList<String> quality_picturesUrl) {
+        this.quality_picturesUrl = quality_picturesUrl;
+    }
+
+    public void addQuality_pictureUrl(String picUrl){
+        if (quality_picturesUrl == null)
+            this.quality_picturesUrl = new LinkedList<String>();
+        this.quality_picturesUrl.add(picUrl);
+
+    }
+
+    public Bitmap getHQpicture() {
+        return HQpicture;
+    }
+
+    public void setHQpicture(Bitmap HQpicture) {
+        this.HQpicture = HQpicture;
     }
 }

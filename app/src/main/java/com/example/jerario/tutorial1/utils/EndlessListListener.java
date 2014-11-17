@@ -16,10 +16,11 @@ import java.io.Serializable;
 import java.util.LinkedList;
 
 /**
+ * Listener that send more request when the bottom of the list is reached
  * Created by jerario on 11/12/14.
  */
 public class EndlessListListener implements AbsListView.OnScrollListener {
-    private static final Boolean DEBUGING = false;
+    private static final Boolean DEBUGING = true;
     private static String TAG = "EndlessListListener";
 
     private int itemsPerPage = 15;
@@ -80,7 +81,7 @@ public class EndlessListListener implements AbsListView.OnScrollListener {
         if (DEBUGING) Log.d(TAG,"visibleItemCount " +Integer.toString(visibleItemCount-1));
         if (DEBUGING) Log.d(TAG,"firstVisibleItem " +Integer.toString(firstVisibleItem-1));
         if (DEBUGING) Log.d(TAG,"itemsPerPage " +Integer.toString(CONST.VISIBLEITEMSHOLD));
-    if (!loading && (totalItemCount-1 - visibleItemCount) <= (firstVisibleItem-1 + CONST.VISIBLEITEMSHOLD)) {
+        if (!loading && (totalItemCount-1 - visibleItemCount) <= (firstVisibleItem-1 + CONST.VISIBLEITEMSHOLD)) {
             // I load the next page of gigs using a background task,
             // but you can call any function here.
             if (DEBUGING) Log.d(TAG,"Searching MORE ITEMS");

@@ -21,6 +21,10 @@
             android:name=".ResultsActivity"
             android:label="@string/title_activity_results" >
         </activity>
+        <activity
+            android:name=".VIPViewActivity"
+            android:label="@string/title_details" >
+        </activity>
     </application>
 
 </manifest>

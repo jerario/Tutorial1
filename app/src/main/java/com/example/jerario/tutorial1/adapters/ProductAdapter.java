@@ -82,6 +82,10 @@ public class ProductAdapter extends BaseAdapter implements ImageListener{
             if (quantityView != null)
                 contenedor.available_quantity= (TextView) quantityView;
 
+            View conditionView = view.findViewById(R.id.condition);
+            if (conditionView != null)
+                contenedor.condition = (TextView) conditionView;
+
             View imageView = view.findViewById(R.id.pic);
             if (imageView != null)
                 contenedor.pic = (ImageView) imageView;
@@ -112,6 +116,10 @@ public class ProductAdapter extends BaseAdapter implements ImageListener{
         if (contenedor.available_quantity != null)
             contenedor.available_quantity.setText(stock +":"+quantity);
 
+        //Condition
+        if (contenedor.condition != null)
+            contenedor.condition.setText(item.getCondition());
+
         //Subtitle
         if (contenedor.subtitle != null) {
             if (item.getSubtitle() != null) {
@@ -129,7 +137,7 @@ public class ProductAdapter extends BaseAdapter implements ImageListener{
             if (!item.isDownloading()){
                 item.setDownloading(true);
                 if (item.getPicUrl() != null)
-                    ImagesDownloader.getInstance().getImage(getListenerId(), position, item.getPicUrl());
+                    ImagesDownloader.getInstance().getImage(ImagesDownloadedHandler.getInstance(),getListenerId(), position, item.getPicUrl());
             }
         }
         else {
@@ -164,6 +172,7 @@ public class ProductAdapter extends BaseAdapter implements ImageListener{
         TextView subtitle;
         TextView price;
         TextView available_quantity;
+        TextView condition;
         ImageView pic;
         //ProgressBar progress;
     }

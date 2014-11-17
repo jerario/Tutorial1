@@ -2,27 +2,17 @@ package com.example.jerario.tutorial1;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 
 import com.example.jerario.tutorial1.entities.Item;
-import com.example.jerario.tutorial1.managers.ItemManager;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.util.LinkedList;
 
-import com.example.jerario.tutorial1.adapters.ProductAdapter;
-import com.example.jerario.tutorial1.tasks.SearchItemsTask;
-import com.example.jerario.tutorial1.utils.CONST;
-import com.example.jerario.tutorial1.utils.Closure;
 import com.example.jerario.tutorial1.utils.EndlessListListener;
 
 
@@ -47,6 +37,18 @@ public class ResultsActivity extends Activity {
         }
         View inflatedView = getLayoutInflater().inflate(R.layout.product_loading, null);
         listResults.addFooterView(inflatedView);
+
+        listResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
+                showVipView(productList.get(position));
+            }
+        });
+    }
+
+    private void showVipView(Item item) {
+        Intent intent = new Intent(this, VIPViewActivity.class);
+        intent.putExtra("item",item);
+        startActivity(intent);
     }
 
 

@@ -3,6 +3,7 @@ package com.example.jerario.tutorial1.managers;
 import android.util.Log;
 
 import com.example.jerario.tutorial1.entities.Item;
+import com.example.jerario.tutorial1.utils.JSONUtils;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -25,6 +26,7 @@ import java.util.LinkedList;
  * @description: Search items using MercadoLibre API
  */
 public class ItemManager {
+    private final String TAG = "ITEM MANAGER";
 
     public LinkedList<Item> searchItems(String query, int offset, int limit) throws IOException, JSONException{
         StringBuilder uriStringBuilder = new StringBuilder();
@@ -40,14 +42,8 @@ public class ItemManager {
         Log.d("ITEMMANAGER",uriString);
 
         //Executing query
-        HttpUriRequest request = new HttpGet(uriString);
-        HttpClient client = new DefaultHttpClient();
-        BasicHttpParams basicHttpParams = new BasicHttpParams();
-        request.setParams(basicHttpParams);
-        request.setHeader(new BasicHeader("Content-Type","application/json"));
-        HttpResponse response = client.execute(request);
-        String responseStr = EntityUtils.toString(response.getEntity());
 
+        String responseStr = JSONUtils.ejecuteQuery(uriString);
         JSONObject result = new JSONObject(responseStr);
         //Creating list of products
         LinkedList<Item> itemList = new LinkedList<Item>();
@@ -56,19 +52,36 @@ public class ItemManager {
         for (int i = 0; i < resultJsArray.length() ; i++) {
             Item item = new Item();
             actualObject = resultJsArray.getJSONObject(i);
+            item.setId(actualObject.getString("id"));
             item.setTitle(actualObject.getString("title"));
             item.setCondition(actualObject.getString("condition"));
             item.setSubtitle(actualObject.getString("subtitle"));
             item.setAvailable_quantity(actualObject.getInt("available_quantity"));
-            Log.d("BUSCANDO    ", actualObject.getString("thumbnail"));
             item.setPicUrl(actualObject.getString("thumbnail"));
-            Log.d("SETEADO    ", item.getPicUrl());
+            Log.d(TAG,"SETING THUMB "+item.getPicUrl());
             item.setPrice(actualObject.getDouble("price"));
+            /*JSONArray qualityPictures = getJSONPictures(actualObject.getString("id"));
+            for (int j = 0; j<qualityPictures.length();j++){
+                JSONObject jsitem = qualityPictures.getJSONObject(j);
+                item.addQuality_pictureUrl(jsitem.getString("url"));
+            }*/
             itemList.add(item);
         }
 
         return itemList;
-
     }
+
+    public static JSONArray getJSONPictures(String id) throws IOException, JSONException{
+        StringBuilder uriStringBuilder = new StringBuilder();
+        uriStringBuilder.append("https://api.mercadolibre.com/items/");
+        uriStringBuilder.append(id);
+        String uriString = uriStringBuilder.toString();
+        String response = JSONUtils.ejecuteQuery(uriString);
+        JSONObject result = new JSONObject(response);
+        JSONArray resultJsArray = result.getJSONArray("pictures");
+        return resultJsArray;
+    }
+
+
 
 }

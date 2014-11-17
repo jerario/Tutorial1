@@ -8,5 +8,9 @@
     <string name="send">Buscar!</string>
     <string name="stock">Stock</string>
     <string name="title_activity_results">Resultados</string>
+    <string name="title_details">Detalles</string>
+    <string name="isNew">Nuevo</string>
+    <string name="isUsed">Usado</string>
+
 
 </resources>

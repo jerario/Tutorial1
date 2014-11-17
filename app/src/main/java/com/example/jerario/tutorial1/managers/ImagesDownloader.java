@@ -2,13 +2,18 @@ package com.example.jerario.tutorial1.managers;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.util.LruCache;
 
+import com.example.jerario.tutorial1.entities.Item;
 import com.example.jerario.tutorial1.handlers.ImagesDownloadedHandler;
 import com.example.jerario.tutorial1.utils.CONST;
 import com.example.jerario.tutorial1.utils.ImageUtils;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -39,11 +44,13 @@ public class ImagesDownloader {
         threadPoolExecutor = new ThreadPoolExecutor(2,5,20, TimeUnit.SECONDS,new LinkedBlockingQueue<Runnable>());
     }
 
-    public void getImage(final int contentId, final int imageId ,final String imageUrl){
+    public void getImage(final Handler handler, final int contentId, final int imageId ,final String imageUrl){
         threadPoolExecutor.execute(new Runnable() {
             @Override
             public void run() {
                 try{
+                    if (imageUrl == null || imageUrl.isEmpty())
+                        return ;
                     //Searching if it exist in cache
                     if (DEBUGING) Log.d(TAG, "Starting geting image from " + imageUrl);
                     Bitmap image = imagesCache.get(imageUrl);
@@ -57,7 +64,7 @@ public class ImagesDownloader {
                       //  final BitmapFactory.Options options = new BitmapFactory.Options();
                       //  options.inJustDecodeBounds = true;
                        // BitmapFactory.decodeResource(imageUrl,imageUrl,options);
-                        Message msg = Message.obtain(ImagesDownloadedHandler.getInstance(), CONST.IMAGEDOWNLOADED,contentId,imageId,image);
+                        Message msg = Message.obtain(handler, CONST.IMAGEDOWNLOADED,contentId,imageId,image);
                         if (DEBUGING) Log.d(TAG, "sending message" );
                         msg.sendToTarget();
                 }
@@ -67,6 +74,25 @@ public class ImagesDownloader {
             }
         });
     }
+
+    public void getImageUrl(final Handler handler,final Item item){
+        threadPoolExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    JSONArray qualityPictures = ItemManager.getJSONPictures(item.getId());
+                    for (int j = 0; j < qualityPictures.length(); j++) {
+                        JSONObject jsitem = qualityPictures.getJSONObject(j);
+                        item.addQuality_pictureUrl(jsitem.getString("url"));
+                    }
+                    Message msg = Message.obtain(handler, CONST.URLMSG,item);
+                    msg.sendToTarget();
+                }
+                catch (Exception ex){
+                    ex.printStackTrace();
+                }
+            }
+        });    }
 
 
 }

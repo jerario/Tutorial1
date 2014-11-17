@@ -24,6 +24,9 @@ public class CONST {
     public static final int IMAGEDOWNLOADED = 1414;
     public static final int IMAGECODE = 91414;
 
+    public static final int URLMSG = 2000;
+    public static final int BITMAPMSG = 2001;
+
 
 
 }
