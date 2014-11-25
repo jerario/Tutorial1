@@ -3,7 +3,6 @@ package com.example.jerario.tutorial1.handlers;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import com.example.jerario.tutorial1.utils.CONST;
 import com.example.jerario.tutorial1.utils.ImageListener;
@@ -32,7 +31,6 @@ public class ImagesDownloadedHandler extends Handler {
 
     @Override
     public void handleMessage(Message msg){
-        if (DEBUGING) Log.d(TAG, "Message handling..");
         if (msg.what != CONST.IMAGEDOWNLOADED){
             return;
         }
@@ -41,7 +39,6 @@ public class ImagesDownloadedHandler extends Handler {
         int imageId = msg.arg2;
         ImageListener listener = imageListenerHash.get(imageListenerId);
         listener.notifyImageAvailable(imageId,image);
-        if (DEBUGING) Log.d(TAG, "Notifying that image is already available");
     }
 
     public void registerListener(ImageListener listener){

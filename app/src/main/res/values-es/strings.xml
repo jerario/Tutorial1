@@ -11,6 +11,11 @@
     <string name="title_details">Detalles</string>
     <string name="isNew">Nuevo</string>
     <string name="isUsed">Usado</string>
+    <string name="track">Seguir</string>
+    <string name="untrack">Dejar de seguir</string>
 
+    <string name="expired">Expirado</string>
+    <string name="aboutExpire">El producto está por expirar</string>
+    <string name="priceChanged">El precio del producto ha cambiado</string>
 
 </resources>

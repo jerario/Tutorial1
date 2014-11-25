@@ -11,7 +11,13 @@
     <string name="title_details">Details</string>
     <string name="isNew">New</string>
     <string name="isUsed">Used</string>
+    <string name="title_activity_results_fragment">ResultsFragment</string>
 
+    <string name="track">Track</string>
+    <string name="untrack">Untrack</string>
 
+    <string name="expired">Expired</string>
+    <string name="aboutExpire">About to expire</string>
+    <string name="priceChanged">The price of the item changed</string>
 
 </resources>

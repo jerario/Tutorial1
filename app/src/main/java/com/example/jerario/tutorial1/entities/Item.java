@@ -1,11 +1,8 @@
 package com.example.jerario.tutorial1.entities;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 
-import java.io.InputStream;
 import java.io.Serializable;
-import java.net.URL;
 import java.util.LinkedList;
 
 /**
@@ -29,10 +26,12 @@ public class Item implements Serializable{
     private transient Bitmap picture;
     private LinkedList<String> quality_picturesUrl;
     private transient Bitmap HQpicture;
+    private boolean tracked;
+    private long stopTime;
 
 
     public Item(){
-
+        this.tracked = false;
     }
 
     public Item(String title) {
@@ -50,6 +49,7 @@ public class Item implements Serializable{
         this.sold_quantity = sold_quantity;
         this.condition = condition;
         this.description = description;
+        this.tracked = false;
     }
 
     public String getId() {
@@ -176,5 +176,21 @@ public class Item implements Serializable{
 
     public void setHQpicture(Bitmap HQpicture) {
         this.HQpicture = HQpicture;
+    }
+
+    public boolean isTracked() {
+        return tracked;
+    }
+
+    public void setTracked(boolean tracked) {
+        this.tracked = tracked;
+    }
+
+    public long getStopTime() {
+        return stopTime;
+    }
+
+    public void setStopTime(long stopTime) {
+        this.stopTime = stopTime;
     }
 }

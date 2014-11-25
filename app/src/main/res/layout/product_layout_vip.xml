@@ -54,4 +54,15 @@
         android:layout_toEndOf="@+id/subtitle"
         android:layout_marginLeft="63dp" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/tracker"
+        android:background="#ffffec02"
+        android:textColor="#ff000dff"
+        android:shadowColor="#ff0011ff"
+        android:layout_below="@+id/price"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

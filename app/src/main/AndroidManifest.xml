@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.jerario.tutorial1" >
-    <uses-sdk android:minSdkVersion="17" android:targetSdkVersion="17" />
+
+    <uses-sdk
+        android:minSdkVersion="17"
+        android:targetSdkVersion="17" />
+
     <uses-permission android:name="android.permission.INTERNET" />
+
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -22,9 +28,13 @@
             android:label="@string/title_activity_results" >
         </activity>
         <activity
-            android:name=".VIPViewActivity"
-            android:label="@string/title_details" >
+            android:name="com.example.jerario.tutorial1.VIPViewActivity"
+            android:label="@string/title_details"
+            android:parentActivityName=".ResultsActivity">
         </activity>
+
+        <service android:name=".tasks.TrackerService" />
+
     </application>
 
 </manifest>

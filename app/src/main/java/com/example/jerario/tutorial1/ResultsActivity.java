@@ -1,84 +1,76 @@
 package com.example.jerario.tutorial1;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import com.example.jerario.tutorial1.entities.Item;
+import com.example.jerario.tutorial1.utils.CONST;
+import com.example.jerario.tutorial1.utils.EndlessListListener;
 
 import java.util.LinkedList;
 
-import com.example.jerario.tutorial1.utils.EndlessListListener;
 
-
-public class ResultsActivity extends Activity {
-
+public class ResultsActivity extends Activity implements ResultsFragment.IOnClick {
+    public static final String TAG = ResultsActivity.class.getName();
     private String message;
     private LinkedList<Item> productList = new LinkedList<Item>();
+    private Item selectedItem;
     private EndlessListListener listListener;
+    private FragmentManager fm;
+    private VipViewFragment vipFragment;
+    private ResultsFragment resultsFragment;
+    boolean mDualPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_results);
-        Intent intent = getIntent();
-        ListView listResults = (ListView) findViewById(R.id.results);
-        if (savedInstanceState == null)
-            listListener = new EndlessListListener(intent, ResultsActivity.this, listResults, productList);
-        else {
-            productList = (LinkedList<Item>) savedInstanceState.getSerializable("products");
-            listListener = new EndlessListListener(intent, ResultsActivity.this, listResults,productList);
-           // listListener.showView(products);
-        }
-        View inflatedView = getLayoutInflater().inflate(R.layout.product_loading, null);
-        listResults.addFooterView(inflatedView);
+        setContentView(R.layout.results_container);
+        fm = getFragmentManager();
 
-        listResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
-                showVipView(productList.get(position));
+
+        VipViewFragment vip = (VipViewFragment) getFragmentManager().findFragmentById(R.id.vip_fragment);
+        mDualPane = !(vip == null || !vip.isInLayout());
+
+        if (fm.findFragmentByTag(ResultsFragment.TAG) == null) {
+            if (getIntent() != null) {
+                message = getIntent().getStringExtra(CONST.QUERYSTRING);
+                resultsFragment = ResultsFragment.newInstance(savedInstanceState, message);
+                fm.beginTransaction().replace(R.id.results_container, resultsFragment, ResultsFragment.TAG).commit();
             }
-        });
+        }  
     }
 
     private void showVipView(Item item) {
         Intent intent = new Intent(this, VIPViewActivity.class);
-        intent.putExtra("item",item);
+        intent.putExtra(CONST.PRODUCTLIST,productList);
+        intent.putExtra(CONST.ITEM, item);
         startActivity(intent);
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_results, menu);
-        return true;
-    }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    public void onItemClick(Item item, LinkedList<Item> productList) {
+        selectedItem = item;
+        this.productList = productList;
+        if (mDualPane) {
+            vipFragment = (VipViewFragment) getFragmentManager().findFragmentById(R.id.vip_fragment);
+            vipFragment.updateView(item);
+        } else {
+            showVipView(item);
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
         }
 
-
-        return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable("products",listListener.getProductList());
 
+    public void setProductList(LinkedList<Item> productList){
+        this.productList = productList;
     }
 }

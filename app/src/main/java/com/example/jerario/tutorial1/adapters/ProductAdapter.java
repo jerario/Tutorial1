@@ -2,13 +2,11 @@ package com.example.jerario.tutorial1.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.jerario.tutorial1.R;
@@ -19,7 +17,6 @@ import com.example.jerario.tutorial1.utils.CONST;
 import com.example.jerario.tutorial1.utils.EndlessListListener;
 import com.example.jerario.tutorial1.utils.ImageListener;
 
-import java.text.NumberFormat;
 import java.util.LinkedList;
 
 /**
@@ -129,11 +126,11 @@ public class ProductAdapter extends BaseAdapter implements ImageListener{
                 contenedor.subtitle.setText(" ");
         }
 
+
+
         //Image
         if (item.getPicture() == null) {
             //The image isn't downloaded yet
-            if (DEBUGING) Log.d(TAG, "Is necessary to download a Pic");
-            if (DEBUGING) Log.d(TAG, "ImgUrl " + item.getPicUrl());
             if (!item.isDownloading()){
                 item.setDownloading(true);
                 if (item.getPicUrl() != null)
@@ -142,7 +139,6 @@ public class ProductAdapter extends BaseAdapter implements ImageListener{
         }
         else {
            //Image already downloaded
-            if (DEBUGING) Log.d(TAG, "The image is downloaded, setting it...");
             contenedor.pic.setImageBitmap(item.getPicture());
         }
         return view;
@@ -160,7 +156,6 @@ public class ProductAdapter extends BaseAdapter implements ImageListener{
     public void notifyImageAvailable(int position, Object image) {
         Item item = (Item) getItem(position);
         if (item != null){
-            if (DEBUGING) Log.d(TAG,"Image is available, setting to item");
             item.setPicture((Bitmap)image);
             EndlessListListener.refreshView();
         }

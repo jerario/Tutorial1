@@ -5,20 +5,14 @@ import android.util.Log;
 import com.example.jerario.tutorial1.entities.Item;
 import com.example.jerario.tutorial1.utils.JSONUtils;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 
 /**
@@ -26,9 +20,10 @@ import java.util.LinkedList;
  * @description: Search items using MercadoLibre API
  */
 public class ItemManager {
-    private final String TAG = "ITEM MANAGER";
+    private static final String TAG = "ITEM MANAGER";
 
     public LinkedList<Item> searchItems(String query, int offset, int limit) throws IOException, JSONException{
+        Log.d(TAG,"searching items in the api");
         StringBuilder uriStringBuilder = new StringBuilder();
         //Creating query
         uriStringBuilder.append("https://api.mercadolibre.com/sites/MLA/search?q=");
@@ -39,7 +34,6 @@ public class ItemManager {
         uriStringBuilder.append(offset);
         String uriString = uriStringBuilder.toString();
 
-        Log.d("ITEMMANAGER",uriString);
 
         //Executing query
 
@@ -58,7 +52,6 @@ public class ItemManager {
             item.setSubtitle(actualObject.getString("subtitle"));
             item.setAvailable_quantity(actualObject.getInt("available_quantity"));
             item.setPicUrl(actualObject.getString("thumbnail"));
-            Log.d(TAG,"SETING THUMB "+item.getPicUrl());
             item.setPrice(actualObject.getDouble("price"));
             /*JSONArray qualityPictures = getJSONPictures(actualObject.getString("id"));
             for (int j = 0; j<qualityPictures.length();j++){
@@ -82,6 +75,37 @@ public class ItemManager {
         return resultJsArray;
     }
 
+    public static Item getItem(String id) throws IOException, JSONException{
+        Item item = new Item();
+        StringBuilder uriStringBuilder = new StringBuilder();
+        uriStringBuilder.append("https://api.mercadolibre.com/items/");
+        uriStringBuilder.append(id);
+        String uriString = uriStringBuilder.toString();
+        String response = JSONUtils.ejecuteQuery(uriString);
+        String stringDate;
+        Date date;
+
+        JSONObject result = new JSONObject(response);
+
+        item.setId(id);
+        item.setTitle(result.getString("title"));
+        item.setCondition(result.getString("condition"));
+        item.setSubtitle(result.getString("subtitle"));
+        item.setAvailable_quantity(result.getInt("available_quantity"));
+        item.setPicUrl(result.getString("thumbnail"));
+        item.setPrice(result.getDouble("price"));
+
+        stringDate = result.getString("stop_time");
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            Date convertedDate = dateFormat.parse(stringDate);
+            item.setStopTime(convertedDate.getTime());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        item.setPrice(result.getDouble("price"));
+        return item;
+    }
 
 
 }

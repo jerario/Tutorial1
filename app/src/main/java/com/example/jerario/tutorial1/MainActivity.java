@@ -1,25 +1,30 @@
 package com.example.jerario.tutorial1;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.SharedPreferences.*;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.jerario.tutorial1.tasks.TrackerService;
 import com.example.jerario.tutorial1.utils.CONST;
 
 
 public class MainActivity extends Activity {
+    public static final String TAG = MainActivity.class.getName();
     private EditText toSearch;
     private Button send;
     private int offset;
-
+    PendingIntent pendingIntent;
+    AlarmManager alarm;
 
     SharedPreferences sharedPreferences;
 
@@ -27,6 +32,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initComponents();
+        initService();
     }
 
     private void initComponents(){
@@ -46,6 +52,14 @@ public class MainActivity extends Activity {
             }
         });
 
+    }
+
+    private void initService(){
+        Intent tracker = new Intent(this, TrackerService.class);
+        pendingIntent = PendingIntent.getService(this, 0, tracker, 0);
+        alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarm.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(),
+                60 * 1000, pendingIntent);
     }
 
     @Override
@@ -88,7 +102,8 @@ public class MainActivity extends Activity {
         savingLastQuery();
         String queryString = toSearch.getText().toString().trim();
         Intent queryIntent = new Intent(this,ResultsActivity.class);
-        queryIntent.putExtra("queryString",queryString);
+       // Intent queryIntent = new Intent(this,ResultsFragment.class);
+        queryIntent.putExtra(CONST.QUERYSTRING,queryString);
         startActivity(queryIntent);
     }
 }

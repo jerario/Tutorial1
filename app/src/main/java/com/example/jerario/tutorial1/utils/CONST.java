@@ -1,6 +1,7 @@
 package com.example.jerario.tutorial1.utils;
 
 /**
+ * Class with the Constants
  * Created by jerario on 11/12/14.
  */
 public class CONST {
@@ -10,9 +11,27 @@ public class CONST {
     public static final String LASTQUERY = "lastQuery";
     public static final String QUERYSTRING = "queryString";
 
+    public static final String CALLER = "caller";
+    public static final String VIPVIEW = "vipView";
+    public static final String LIST = "list";
+    public static final String FROMNOTIFICATION = "fromNotification";
 
+
+
+    public static final String PRODUCTLIST = "productList";
+    public static final String ITEM = "item";
+
+    public static final String PAGESAVED = "pageSaved";
+
+
+
+    public static final String ITEMID = "itemId";
     //ListListener
     public static final int VISIBLEITEMSHOLD = 3;
+
+    //Database
+    public static final double QUERYISNULL = -1;
+
 
 
     //Images

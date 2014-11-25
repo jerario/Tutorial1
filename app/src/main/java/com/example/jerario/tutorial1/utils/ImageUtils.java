@@ -1,19 +1,17 @@
 package com.example.jerario.tutorial1.utils;
 
-import android.content.*;
-import android.graphics.*;
-import android.net.*;
-import android.util.Log;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 
-import org.apache.http.*;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.*;
+import org.apache.http.util.EntityUtils;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 
@@ -27,7 +25,6 @@ public class ImageUtils {
 
     public static byte[] convertUrlToByte(String url){
         try {
-            if (DEBUGING) Log.d(TAG, "Start Conversion from: " + url);
             HttpClient httpclient = new DefaultHttpClient();
             HttpRequestBase request = new HttpGet(url);
             HttpResponse response = httpclient.execute(request);
@@ -35,7 +32,6 @@ public class ImageUtils {
             if (entity == null) {
                 return null;
             }
-            if (DEBUGING) Log.d(TAG, "Conversion finished and entity is null: " + Boolean.toString(entity == null));
             return EntityUtils.toByteArray(entity);
         } catch (Exception e) {
             e.printStackTrace();
